@@ -1,0 +1,33 @@
+
+body {
+    background-color: var(--color-background);
+}
+
+.btn-event i {
+    margin-right: 20px; 
+  }
+
+
+.btn-event a{
+    text-decoration: none;
+    color: var(--text-button);
+}
+
+.btn-event:hover a{
+    text-decoration: none;
+    color: var(--text-button-hover);
+}
+
+.btn-google{
+    padding: 15px 40px ;
+}
+
+
+.width-btn-100{
+    margin-top: 10px;
+    width: 100%;
+}
+.acciones-modal a{
+    text-decoration: none;
+    color: var(--color-suceso);
+}

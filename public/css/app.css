@@ -1,0 +1,118 @@
+/*Esta area definira estilos globales como 
+tamaño de letras y colores , intentare hacer
+todo basandome en esto pero no prometo nada*/
+:root {
+    /*Gama de colores*/
+    --primary-color: #49D6FF ;
+    --secondary-color: #AAADBF;
+    --tertiary-color: #a2bce9;
+    --quaternary-color: #70D6FF ;
+    --quinary-color: #0D0D0D;
+    /*Colores especificos*/
+    --color-suceso: #91aee0;;
+    /*Tamaño de textos*/
+    --very-small-text: 12px;
+    --small-text: 14px;
+    --medium-text: 16px;
+    --large-text: 20px;
+    --extra-large-text: 24px;
+    /*Color textos*/
+    --text-button: #0D0D0D;
+    --text-button-hover: var(--quinary-color);
+    /*Detalles botones*/
+    --button-radius: 5px;
+    --button-border: 1px solid var(--quaternary-color);
+}
+/*Este solo se encarga del estilo del layout , donde sea que lo ponga aparecera*/
+* {
+    font-family: 'Lato', sans-serif;
+}
+
+/*Estilos para justificaciones*/
+.justify-center {
+    display: flex;
+    justify-content: center;
+}
+/*Estilos para botones*/
+/*Boton event :Este boton , sera una base para los botones y tendran que modificarse con una clase
+ unica secundaria*/
+.btn-event {
+    background-color: var(--primary-color);
+    color: var(--text-button);
+    cursor: pointer;
+    border-radius: var(--button-radius);
+    border: var(--button-border);
+    transition: background-color 0.3s;
+    padding: 10px 20px 10px 20px;
+    font-size: var(--medium-text);
+    text-decoration: none;
+}
+
+.btn-event:hover {
+    background-color: var(--quaternary-color);
+    color: var(--text-button-hover);
+    text-decoration: none;
+    border: var(--button-border);
+}
+
+.input-class{
+    background-color: #fff;
+    border-radius: 10px;
+    outline: none;
+    box-shadow: none;
+}   
+
+.width-btn-100{
+    margin-top: 10px;
+    width: 100%;
+}
+
+
+.btn-event-accept{
+    background-color: #5fa861;
+    color: var(--text-button);
+    cursor: pointer;
+    border-radius: var(--button-radius);
+    border: var(--button-border);
+    transition: background-color 0.3s;
+    padding: 10px 20px 10px 20px;
+    font-size: var(--medium-text);
+    text-decoration: none;
+}
+
+.btn-event-accept:hover {
+    background-color: #45a049;
+    color: var(--text-button-hover);
+    text-decoration: none;
+    border: var(--button-border);
+}
+
+.btn-event-cancel{
+    background-color: #eb6c63;
+    color: var(--text-button);
+    cursor: pointer;
+    border-radius: var(--button-radius);
+    border: var(--button-border);
+    transition: background-color 0.3s;
+    padding: 10px 20px 10px 20px;
+    font-size: var(--medium-text);
+    text-decoration: none;
+}
+
+.btn-event-cancel:hover {
+    background-color: #da190b;
+    color: var(--text-button-hover);
+    text-decoration: none;
+    border: var(--button-border);
+}
+
+
+.backgraund-element{
+    background-color: var( --tertiary-color);
+    padding: 20px;
+    color: var(--text-button);
+}
+
+.backgraund-element span{
+    font-size: var(--large-text);
+}

@@ -1,0 +1,56 @@
+body {
+    background-color: var(--color-background);
+ }
+.oculto{
+    display: none;
+    border: none !important;
+    margin-top: -15px;
+}
+.avatar-icon{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+ .options-user{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+ }
+ .item-option-icon {
+    display: flex;
+    align-items: center; 
+    padding: 10px;
+    text-decoration: none; 
+    color: inherit;
+    width: 100%;
+}
+
+.item-option-icon:hover {
+    text-decoration: none; 
+    color: inherit; 
+}
+
+a span{
+    margin-left: 10px;
+}
+
+.post-list-container {
+    max-height: 80vh;  /* Define la altura máxima */
+    overflow-y: auto;   /* Permite el desplazamiento vertical */
+}
+
+.story-container {
+    display: flex;
+    align-items: center;
+    padding: 2px;
+    border-bottom: 1px solid var(--color-border);
+    min-height: 150px;
+    gap: 20px;
+    overflow-x: auto;
+    white-space: nowrap; /* Esto es importante para que los elementos no se rompan en varias líneas */
+}
+
+.story-container x-story {
+    margin-right: 10px;
+}
