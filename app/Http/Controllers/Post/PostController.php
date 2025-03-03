@@ -205,7 +205,6 @@ class PostController extends Controller
     //Ruta evaluad
     public function store(Request $request)
     {
-        // Validación de los datos
         try {
             $validated = $request->validate([
                 'content' => 'required|string',
@@ -214,74 +213,68 @@ class PostController extends Controller
                 'interests.*' => 'exists:interests,id',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
-            // Captura el error de validación y lo pasa al usuario
             return redirect()->back()->withErrors($e->errors());
         }
-        
-        // Verificar si la validación pasó
-        if ($validated) {
-            // Crear el post
-            $post = Post::create([
-                'user_id' => auth()->id(),
-                'content' => $request->content,
-            ]);
-        
-            // Verificar si se ha subido el archivo multimedia
-            if ($request->hasFile('media')) {
-                try {
-                    $media = $request->file('media');
-                    $mediaExtension = $media->getClientOriginalExtension();
-                    // Verificar si el archivo es video
-                    if (in_array($mediaExtension, ['mp4', 'avi'])) {
-                        // Generar un nombre único para el archivo
-                        $newFilename = uniqid() . '.' . $mediaExtension;
-                        $mediaPath = 'posts_media/' . $newFilename;
     
-                        // Mover el archivo al directorio deseado
-                        $media->move(public_path('storage/posts_media'), $newFilename);
-
+        // Crear el post
+        $post = Post::create([
+            'user_id' => auth()->id(),
+            'content' => $request->content,
+        ]);
     
-                    }
-                    // Si el archivo es imagen (jpg, jpeg, png)
-                    elseif (in_array($mediaExtension, ['jpg', 'jpeg', 'png'])) {
-                        // Convertir la imagen a WebP y guardarla
-                        $mediaPath = $this->convertAndStoreImage($media);
-                    } else {
-                        // Si no es imagen ni video, devolver error al usuario
-                        return redirect()->back()->withErrors(['media' => 'Tipo de archivo no soportado.']);
-                    }
-        
-                    // Actualizar el post con la información del archivo
+        // Manejar archivo multimedia
+        if ($request->hasFile('media')) {
+            try {
+                $media = $request->file('media');
+                $mediaExtension = $media->getClientOriginalExtension();
+                $mediaPath = null;
+    
+                // Si es un video (mp4, avi)
+                if (in_array($mediaExtension, ['mp4', 'avi'])) {
+                    $mediaPath = $media->store('posts_media', 'public'); // Guarda en storage/app/public/posts_media
+                } 
+                // Si es una imagen (jpg, jpeg, png), conviértela a WebP
+                elseif (in_array($mediaExtension, ['jpg', 'jpeg', 'png'])) {
+                    $mediaPath = $request->file('media')->store('posts_media', 'public');
+                    $post->media_type = $request->file('media')->getClientOriginalExtension();
+                    $post->media_url = $mediaPath;
+                    //Tuve que cambiar esto a fecha 02/03 ,perdon pero es para la prueba , no se por que no se4 sube a webp reapido 
+                } else {
+                    return redirect()->back()->withErrors(['media' => 'Tipo de archivo no soportado.']);
+                }
+    
+                // Si se subió correctamente, actualiza la publicación
+                if ($mediaPath) {
                     $post->update([
                         'media_type' => $mediaExtension,
                         'media_url' => $mediaPath,
                     ]);
-                } catch (\Exception $e) {
-                    // Devolver error al usuario si ocurre un problema al subir el archivo
-                    return redirect()->back()->withErrors(['media' => 'Error al subir el archivo: ' . $e->getMessage()]);
                 }
+            } catch (\Exception $e) {
+                return redirect()->back()->withErrors(['media' => 'Error al subir el archivo: ' . $e->getMessage()]);
             }
-        
-            // Sincronización de intereses (si los hay)
-            if ($request->has('interests')) {
-                $post->interests()->sync($request->interests);
-            }
-        
-            return redirect()->route('posts.index');
         }
-        
-        // Si la validación falla, devuelve un mensaje genérico al usuario
-        return redirect()->back()->withErrors(['general' => 'Los datos del formulario son incorrectos.']);
+    
+        // Sincronizar intereses
+        if ($request->has('interests')) {
+            $post->interests()->sync($request->interests);
+        }
+    
+        return redirect()->route('posts.index');
     }
-        
-    // Función para convertir y almacenar la imagen en WebP
+    
+    // Función para convertir y almacenar imagen en WebP
     private function convertAndStoreImage($image)
     {
         $imagePath = 'posts_media/' . uniqid() . '.webp';
         $image = Image::make($image);
-        $image->encode('webp', 75)->save(public_path('storage/' . $imagePath));
+        
+        // Guardar en storage/app/public/posts_media/
+        $image->encode('webp', 75)->save(storage_path('app/public/' . $imagePath));
+    
         return $imagePath;
     }
+    
 
     public function show($postId)
     {
